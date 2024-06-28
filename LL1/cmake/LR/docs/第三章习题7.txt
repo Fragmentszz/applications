@@ -1,0 +1,22 @@
+8 2 17 1 1
+S A B Q D E F Z
+a b
+a S A
+b S Q
+a A A
+b A B
+b A Z
+b B D
+a B Q
+a Q Q
+b Q D
+b Q Z
+b D B
+a D A
+a E B
+b E F
+b F D
+a F E
+b F Z
+S
+Z

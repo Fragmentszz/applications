@@ -1,0 +1,11 @@
+5 3 7
+S A B C D
+epslion a b
+S bD
+D BCa
+D epsilon
+A bBC
+C aBC
+C epsilon
+B ab
+S

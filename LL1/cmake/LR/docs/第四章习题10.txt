@@ -1,0 +1,10 @@
+5 3 
+E A B C D
+epsilon a b
+E Ab
+E Ba
+E epsilon
+A BaaC
+A aC
+C AbC
+C b 

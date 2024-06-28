@@ -1,0 +1,10 @@
+4 5 7
+S E T F
++ * ( ) d
+S E
+E E+T
+E T
+T T*F
+T F
+F (E)
+F d

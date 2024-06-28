@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derivation Steps</title>
+    <style>
+        .derivation-step {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <% let derivationChain = derivationSteps[0].p[0] + ' => '; %>
+    <% for(const step of derivationSteps) { %>
+        <% derivationChain += step.after + ' => '; %>
+    <% } %>
+    <% derivationChain = derivationChain.slice(0, -4); // Remove the last " => " %>
+    <div class="derivation-step">
+        <p><strong>总推导过程:</strong> <%= derivationChain %></p>
+    </div>
+    
+    <h1>Derivation Steps:</h1>
+    <% for(const step of derivationSteps) { %>
+        <div class="derivation-step">
+            <p><strong>Step:</strong> <%= step.step %></p>
+            <p><strong>使用产生式:</strong> <%= step.p %></p>
+            <p><strong>After:</strong> <%= step.after %></p>
+        </div>
+    <% } %>
+
+    
+    
+</body>
+</html>

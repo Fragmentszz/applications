@@ -1,0 +1,14 @@
+5 4 10
+S A B C D
+epsilon a b c
+S AB
+S bC
+A epsilon
+A b
+B epsilon
+B aD
+C AD
+C b
+D aS
+D c
+S

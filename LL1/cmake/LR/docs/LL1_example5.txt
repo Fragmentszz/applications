@@ -1,0 +1,9 @@
+3 6 6
+S A B
+a b c d p q
+S Ap
+S Bq
+A a
+A cA
+B b
+B dB

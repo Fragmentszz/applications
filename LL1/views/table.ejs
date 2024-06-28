@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Sets</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Non-Terminals and Their Sets</h1>
+    <table>
+        <tr>
+            <th>Non-Terminal</th>
+            <th>FIRST Set</th>
+            <th>FOLLOW Set</th>
+        </tr>
+        <% for(const nonTerminal of grammar.nonTerminals) { %>
+        <tr>
+            <td><%= nonTerminal %></td>
+            <td>{<%= Array.from(grammar.firstSet[nonTerminal]).join(', ') %>}</td>
+            <td>{<%= Array.from(grammar.followSet[nonTerminal]).join(', ') %>}</td>
+        </tr>
+        <% } %>
+    </table>
+
+    <h1>Productions and Their SELECT Sets</h1>
+    <table>
+        <tr>
+            <th>Production</th>
+            <th>SELECT Set</th>
+        </tr>
+        <% for(const production of grammar.productions) { %>
+        <tr>
+            <td><%= production.left + '->' + production.right.join('') %></td>
+            <td>{<%= Array.from(grammar.selectSet[production.left + '->' + production.right.join('')]).join(', ') %>}</td>
+        </tr>
+        <% } %>
+    </table>
+</body>
+</html>

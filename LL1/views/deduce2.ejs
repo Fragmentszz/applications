@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>LL1预测分析表和分析过程</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .fixed-width {
+      width: 100px;
+      /* 设置固定宽度 */
+    }
+
+    .derivation-step {
+      margin-bottom: 10px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>LL1预测分析表</h1>
+  <table>
+    <tr>
+      <th class="fixed-width">非终结符/终结符</th>
+      <% for (let i=0; i < Terminals2.length; i++) { %>
+        <th class="fixed-width">
+          <%= Terminals2[i] %>
+        </th>
+        <% } %>
+    </tr>
+    <% for (let nonTerminal of nonTerminals) { %>
+      <tr>
+        <td class="fixed-width">
+          <%= nonTerminal %>
+        </td>
+        <% for (let terminal of Terminals2) { %>
+          <td class="fixed-width">
+            <%= table[nonTerminal][terminal] || '' %>
+          </td>
+          <% } %>
+      </tr>
+      <% } %>
+  </table>
+
+  <h1>分析过程</h1>
+  <table>
+    <tr>
+      <th>栈</th>
+      <th>输入符号</th>
+      <th>动作</th>
+    </tr>
+    <% for (let step of process) { %>
+      <tr>
+        <td>
+          <%= step.stack %>
+        </td>
+        <td>
+          <%= step.nows %>
+        </td>
+        <td>
+          <%= step.action %>
+        </td>
+      </tr>
+      <% } %>
+  </table>
+  <% if(successful) {%>
+    <% let derivationChain=derivationSteps[0].p + ' => ' ; %>
+    <% for(const step of derivationSteps) { %>
+      <% derivationChain +=step.after + ' => ' ; %>
+    <% } %>
+    <% derivationChain=derivationChain.slice(0, -4); // Remove the last " => " %>
+      <div class="derivation-step">
+        <p><strong>总推导过程:</strong>
+          <%= derivationChain %>
+        </p>
+      </div>
+  <%} else {%>
+    <div class="derivation-step">
+      <a class="error-a">
+        <%= error %>
+      </a>
+    </div>
+  <%} %>
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+5 7 9
+S H K L M
+epsilon a o d e f b
+S MH
+S a
+H LSo
+H epsilon
+K dML
+K epsilon
+L eHf
+M K
+M bLM
+S

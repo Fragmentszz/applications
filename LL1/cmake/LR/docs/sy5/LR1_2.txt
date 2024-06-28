@@ -1,0 +1,10 @@
+3 4 6
+S E T
+= a + *
+S E=E
+S a
+E T
+E E+T
+T a
+T T*a
+S

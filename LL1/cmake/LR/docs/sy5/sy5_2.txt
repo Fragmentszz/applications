@@ -1,0 +1,9 @@
+3 3 5
+S A B
+epsilon a b
+S AB
+A aBa
+A epsilon
+B bAb
+B epsilon
+S

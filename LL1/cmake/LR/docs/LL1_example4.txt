@@ -1,0 +1,10 @@
+3 6 6
+S A B
+a b c d p q
+S pA
+S qB
+A cAd
+A a
+B dB
+B b
+S

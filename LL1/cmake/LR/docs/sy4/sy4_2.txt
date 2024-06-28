@@ -1,0 +1,14 @@
+5 7 10
+S' B C D E
+epsilon a b c d f g
+S' BCc
+S' gDB
+B bCDE
+B epsilon
+C DaB
+C ca
+D dD
+D epsilon
+E gAf
+E c
+S'

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DFA Image Generator</title>
+
+</head>
+<body>
+  
+    <div id="help">
+        <div class="center">
+            <div class="container">
+                <h1>用法:</h1>
+                <p>用法1. 上传描述NFA的txt文件，点击Generate Images生成其NFA，确定化后的DFA的和最小化DFA的三张图片。</p>
+                <p>用法2. 上传描述NFA的txt文件，输入要被测试的字符串，点击Test Text测试字符串是否可以被该自动机所接受。</p>
+                <p>
+                  <font color="red"><h2>文件格式:</h2></font>
+                </p>
+                <img src="/imgs/zzz.png">
+                <p><a href="/download_example">点击下载示例文件</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h1>DFA Image Generator</h1>
+        <form id="imageForm">
+            <input type="text" id="inputText" name="inputText" placeholder="此处输入要被测试的字符串">
+            <input type="file" name="inputFile" accept=".txt">
+            <button type="submit">Generate Images</button>
+            <button type="button" onclick="testText()">Test Text</button>
+        </form>
+    </div>
+    <div id="testResult"></div>
+<script type="text/javascript" src="index_js.js"></script>
+</body>
+</html>

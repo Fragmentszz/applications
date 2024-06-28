@@ -1,0 +1,11 @@
+5 6 8
+E E' T T' F
+epsilon + * ( ) i
+E TE'
+E' +TE'
+E' epsilon
+T FT'
+T' *FT'
+T' epsilon
+F i
+F (E)

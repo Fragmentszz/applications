@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LL1 Grammar</title>
+
+</head>
+<body>
+    <div id="help">
+        <div class="center">
+            <div class="container">
+                <h1>用法:</h1>
+                <p>用法1. 上传描述上下文无关文法CFG的txt文件，点击上传文法按钮上传文件，并且压缩计算其FIRST,FOLLOW,SELECT集合</p>
+                <p>用法2. 上传描述上下文无关文法CFG的txt文件，输入要被测试的字符串，点击Deduce，试图这个文法推导该句子</p>
+                <p>
+                  <font color="red"><h2>文件格式:</h2></font>
+                </p>
+                <iframe src="/format.html" height="600px" width="800px"></iframe>
+                <p><a href="/download_example">点击下载示例文件</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h1>LL1 Grammar</h1>
+        
+        <form id="imageForm">
+            <input type="text" id="inputText" name="inputText" placeholder="此处输入要推导的字符串">
+            <input type="file" name="inputFile" accept=".txt">
+            <button type="submit">Caculate Sets</button>
+            <button type="button" id="deduce">Deduce</button>
+            <input type="hidden" id="mode" name="mode">
+            <input type="hidden" id="action" name="action">
+            <input type="hidden" id="semantic" name="semantic">
+        </form>
+        <div>
+            <label>
+                <input type="radio" name="parserMode" value="LR0" checked>
+                LR0模式
+              </label>
+              <label>
+                <input type="radio" name="parserMode" value="SLR1">
+                SLR1模式
+              </label>
+              <label>
+                <input type="radio" name="parserMode" value="LR1">
+                LR1模式
+              </label>
+        </div>
+        <button type="button" class="table">LR表</button>
+        <button type="button" class="deduce">LR分析</button>
+        <button type="button" class="semantic" id="semanticbutton">S-语义分析</button>
+        <!-- <button type="button" class="table" mode="SLR1">SLR1表</button>
+        <button type="button" class="deduce" mode="SLR1">SLR1分析</button>
+        <button type="button" class="table" mode="LR1">LR1表</button>
+        <button type="button" class="deduce" mode="LR1">LR1分析</button> -->
+    </div>
+    <div id="testResult"></div>
+<script type="text/javascript" src="/js/index.js"></script>
+
+</body>
+</html>

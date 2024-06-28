@@ -1,0 +1,7 @@
+fileServer/files/
+WWDLDG/
+miniconda/
+nodejs/
+**/uploads/
+**/node_modules/
+**/build/*

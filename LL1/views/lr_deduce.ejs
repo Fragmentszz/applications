@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LR分析过程</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .input{
+            text-align: right;
+        }
+        .centeralign{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>LR分析过程</h1>
+    <table>
+        <tr>
+            <th class="centeralign">步骤</th>
+            <th class="centeralign">状态栈</th>
+            <th class="centeralign">符号栈</th>
+            <th class="centeralign">输入串</th>
+            <th class="centeralign">Action</th>
+            <th class="centeralign">GOTO</th>
+        </tr>
+        <% steps.forEach((step,index)=> { %>
+            <tr>
+                <td class="centeralign"><%= index %></td>
+                <td><%= step.stateStack %></td>
+                <td><%= step.symbolStack %></td>
+                <td class="input"><%= step.input %></td>
+                <td class="centeralign">
+                    <% if(typeof step.action === "string") { %>
+                        <%= step.action %>
+                    <% } else {%>
+                        <%  if(step.action > 0) {%>
+                            S<sub><%= step.action %></sub>
+                        <% } else {%>
+                            r<sub><%= -step.action %></sub>
+                        <% } %>
+                    <% } %>
+                </td>
+                <td class="centeralign"><%= step.goto || '' %></td>
+            </tr>
+        <% }) %>
+    </table>
+</body>
+</html>

@@ -1,0 +1,11 @@
+5 5 8
+S A B L C
+epsilon n i ( )
+S A
+S B
+A n
+A i
+B (S)
+L SC
+C SC
+C epsilon

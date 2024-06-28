@@ -1,0 +1,10 @@
+5 2 7
+S A B C D
+e f
+S Be
+B Ce
+B Af
+A Ae
+A e
+C Cf
+D f

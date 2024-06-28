@@ -1,0 +1,10 @@
+3 4 6
+E A B
+a b c d
+E aA
+E bB
+A cA
+A d
+B cB
+B d
+E

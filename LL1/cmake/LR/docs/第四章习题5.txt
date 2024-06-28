@@ -1,0 +1,13 @@
+5 9 9
+S C A D B
+epsilon n e i b t a ; l
+S nC
+C aAe
+C ibtaDAe
+A epsilon
+A ;BA
+D epsilon
+D lB
+B a
+B ibtaD
+S

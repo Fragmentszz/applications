@@ -1,0 +1,11 @@
+
+3 5 6
+E T F
++ * ( ) d
+E E+T {E.val = E1.val + T.val}
+E T {E.val = T.val}
+T T*F {T.val = T.val * F.val}
+T F {T.val = F.val}
+F (E) {F.val = E.val}
+F d {F.val = d.lexval}
+E

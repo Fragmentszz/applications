@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LR分析表</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>LR分析表</h1>
+  <table>
+    <tr>
+        <th></th>
+        <th colspan="<%= actionCols %>">ACTION</th>
+        <th colspan="<%= gotoCols %>">GOTO</th>
+    </tr>
+    <tr>
+      <th>状态</th>
+      <% for (let i = 0; i < Table[0].length; i++) { %>
+        <th><%= symbols[i] %></th>
+      <% } %>
+    </tr>
+    <% for (let i = 0; i < Table.length; i++) { %>
+      <tr>
+        <td>S<sub><%= i %></sub></td>
+        <% for (let j = 0; j < actionCols; j++) { %>
+            <td>
+                <% if(Table[i][j] == null) {%>
+                    <% continue; %>
+                <% } %>
+                <% for(let k=0; k < Table[i][j].length; k++) {%>
+                    <% if(Table[i][j][k] == 0) {%>
+                        acc
+                    <% } else if(Table[i][j][k] > 0) {%>
+                        S<sub><%= Table[i][j][k] %></sub>
+                    <% } else {%>
+                        r<sub><%= -Table[i][j][k] %></sub>
+                    <% } %>
+                    <% if(k<Table[i][j].length - 1) {%>
+                        ,
+                    <% } %>
+                <% } %>
+            </td>
+        <% } %>
+        <% for (let j = actionCols; j < Table[i].length; j++) { %>
+            <td>
+                <% if(Table[i][j] == null) {%>
+                    <% continue; %>
+                <% } %>
+                <% for(let k=0; k < Table[i][j].length; k++) {%>
+                    <%=Table[i][j][k]  %>
+                    <% if(k<Table[i][j].length - 1) {%>
+                        ,
+                    <% } %>
+                <% } %>
+            </td>
+        <% } %>
+      </tr>
+    <% } %>
+  </table>
+
+  <h1>LR分析状态表</h1>
+    <table>
+        <tr>
+            <th>状态</th>
+            <th>项目集</th>
+        </tr>
+        <% items.forEach((state, index) => { %>
+            <tr>
+                <td>S<sub><%= index %></sub></td>
+                <td>
+                    <ul>
+                        <% state.forEach(item => { %>
+                            <li><%= item %></li>
+                        <% }) %>
+                    </ul>
+                </td>
+            </tr>
+        <% }) %>
+    </table>
+</body>
+</html>

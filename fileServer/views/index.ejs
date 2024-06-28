@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Server</title>
+</head>
+<body>
+  <h1>File Server</h1>
+  
+  <h2>Upload File</h2>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">Upload</button>
+  </form>
+  <p id="uploadResult"></p>
+
+  <h2>File List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>File Name</th>
+        <th>File Size</th>
+        <th>File Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% files.forEach(file => { %>
+        <tr>
+          <td><a href="<%= file.path %>"><%= file.name %></a></td>
+          <td><%= file.size %></td>
+          <td><%= file.type || 'Unknown' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // ... 省略上传表单的JavaScript逻辑
+  </script>
+</body>
+</html>

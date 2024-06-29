@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文件详情</title>
+  <link rel="stylesheet" href="/File.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="slide-show-left">
+      <h2 class="file-name" title=""><em class="global-icon-16 global-icon-16-exe"></em> <span class="file-name-text">
+          <%= name %>
+        </span></h2>
+      <div class="share-info-zipdesc">文件大小: <span class="zip-quota">
+          <%= size%>
+        </span></div>
+    </div>
+
+
+    <div class="prelook">
+      <!-- <% if(extension==".mp4" ) {%>
+                <video src=<%= prelook %>></video>
+              <% }else {%>
+                <img src=<%=prelook %>>
+              <% } %> -->
+      <img src=<%=prelook %> class="prelookimg"/ 预览>
+    </div>
+    <div class="slide-show-center">
+      <div class="download-btn"><a href=<%=downurl %>>下载</a></div>
+      <div class="open-btn"><a href=<%=openurl %>>在浏览器中打开</a></div>
+    </div>
+  </div>
+
+</body>
+
+</html>

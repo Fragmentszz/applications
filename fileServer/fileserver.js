@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const app = express();
-const {formatFileSize} = require('./util')
+const { formatFileSize,getPrelook } = require('./util')
 
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
@@ -13,13 +13,19 @@ const upload = multer({ dest: 'uploads/' });
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-
+const pswd_set = "wxhna3590";
 // 上传文件的路由 
-app.post('/upload', upload.single('file'), (req, res) => {
+app.post('/upload/*', upload.single('file'), (req, res) => {
+  const filedir = path.join(filepath,req.path.substring(8));
+  const pswd = req.body.pswd;
+  if(pswd != pswd_set){
+    res.status(400).send('Password Denied!');
+    return;
+  }
   if (req.file) {
     // 将文件从临时目录移动到静态文件目录
     const source = fs.createReadStream(req.file.path);
-    const destination = fs.createWriteStream(path.join(filepath, req.file.originalname));
+    const destination = fs.createWriteStream(path.join(filedir, req.file.originalname));
     source.pipe(destination);
     source.on('end', () => {
       fs.unlinkSync(req.file.path); // 删除临时文件
@@ -44,9 +50,23 @@ const downDir = "http://downfile.fragments.work/";
 // 列出文件的路由
 app.get(/^\/(?!download\/).*/, (req, res) => {
   const directoryPath = path.join(__dirname, filepath, req.path);
+  const extension = path.extname(directoryPath).toLowerCase();
   var stat = fs.lstatSync(directoryPath);
   if (stat.isFile()) {
-    res.redirect(`/download/${req.path}`);
+    const filePath = directoryPath;
+    const stats = fs.statSync(filePath);
+    const ejsfile = {
+      name: path.basename(directoryPath),
+      path: req.path,
+      time: stats.atime,
+      size: formatFileSize(stats.size),
+      type: path.extname(directoryPath).substring(1), // 获取文件类型
+      downurl: `/download${req.path}`,
+      openurl: downDir + req.path,
+      prelook: getPrelook(extension,req.path),
+      extension:extension
+    }
+    res.render('File', ejsfile);
   }
   else {
     fs.readdir(directoryPath, (err, files) => {
@@ -55,19 +75,28 @@ app.get(/^\/(?!download\/).*/, (req, res) => {
         return;
       }
       // 获取文件信息
-      const fileList = files.map(file => {
+        const fileList = files.map(file => {
         const filePath = path.join(directoryPath, file);
         const stats = fs.statSync(filePath);
+        let t = "forder";
+        if (stat.isFile()) {
+          t = path.extname(file).substring(1); // 获取文件类型
+        }
+        // 获取文件的最后修改时间（毫秒数）
+        const mtimeMs = stats.mtimeMs + 8*60*60*1000;
+        // 将毫秒数转换为可读的日期和时间
+        const mtimeDate = new Date(mtimeMs);
         return {
           name: file,
           path: path.join(req.path, file),
+          time: mtimeDate.toISOString().replace('T', ' ').slice(0, 19),
           size: formatFileSize(stats.size),
-          type: path.extname(file).substring(1), // 获取文件类型
-          isFile:stat.isFile()
+          type: t,
+          isFile: stats.isFile()
         };
       });
       // 渲染EJS模板
-      res.render('index', { files: fileList });
+      res.render('index', { files: fileList,nowpath:req.path,lastpath:path.dirname(req.path) });
     });
   }
 });

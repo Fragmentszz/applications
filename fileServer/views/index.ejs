@@ -4,36 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>File Server</title>
+  <link rel="stylesheet" href="/index.css">
 </head>
 <body>
-  <h1>File Server</h1>
-  
-  <h2>Upload File</h2>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" name="file" />
-    <button type="submit">Upload</button>
-  </form>
-  <p id="uploadResult"></p>
-
+  <h1>Fragments' File Server</h1>
+  <h2><%= nowpath %></h1>
   <h2>File List</h2>
   <table>
     <thead>
       <tr>
         <th>File Name</th>
+        <th>Update Time</th>
         <th>File Size</th>
         <th>File Type</th>
       </tr>
     </thead>
     <tbody>
+      <tr>
+        <td><a href="<%= lastpath %>" class="folderA">..</a></td>
+          <td>/</td>
+          <td>/</td>
+          <td>/</td>
+      </tr>
       <% files.forEach(file => { %>
         <tr>
-          <td><a href="<%= file.path %>"><%= file.name %></a></td>
+          <% if(!file.isFile) {%>
+            <td><a href="<%= file.path %>" class="fileA"><%= file.name %></a></td>
+          <% }else{ %>
+            <td><a href="<%= file.path %>" class="folderA"><%= file.name %></a></td>
+          <% } %>
+          <td><%= file.time %></td>
           <td><%= file.size %></td>
           <td><%= file.type || 'Unknown' %></td>
         </tr>
       <% }) %>
     </tbody>
   </table>
+
+  <h2>Upload File</h2>
+  <form id="uploadForm" enctype="multipart/form-data" action="/upload<%= nowpath %>" method="POST">
+    <input type="file" name="file" />
+    <button type="submit">Upload</button>
+    <input type="password" name="pswd" placeholder="上传密码"/>
+  </form>
+  <p id="uploadResult"></p>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>

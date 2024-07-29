@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>File Server</title>
   <link rel="stylesheet" href="/index.css">
+
 </head>
 <body>
   <h1>Fragments' File Server</h1>
@@ -42,16 +43,20 @@
   </table>
 
   <h2>Upload File</h2>
-  <form id="uploadForm" enctype="multipart/form-data" action="/upload<%= nowpath %>" method="POST">
-    <input type="file" name="file" />
-    <button type="submit">Upload</button>
-    <input type="password" name="pswd" placeholder="上传密码"/>
-  </form>
-  <p id="uploadResult"></p>
+  <button onclick="showUploadIframe()" id="showButton">Upload</button>
+  <div class="modal" id="modal">
+    <iframe src="<%= nowpath %>/uploadfile.html" id="uploadIframe"></iframe>
+    <button onclick="showUploadIframe()">关闭</button>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/uploadScript.js"></script>
   <script>
+    
+
     // ... 省略上传表单的JavaScript逻辑
   </script>
+
+
 </body>
 </html>

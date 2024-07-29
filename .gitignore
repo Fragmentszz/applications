@@ -5,3 +5,4 @@ nodejs/
 **/uploads/
 **/node_modules/
 **/build/*
+/v2v3-large-file-upload/

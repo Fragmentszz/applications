@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 const { formatFileSize,getPrelook } = require('./util')
-
+const uploadServer = require('./uploadserver.js');
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 const filepath = "files"
@@ -14,28 +14,34 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 const pswd_set = "wxhna3590";
-// 上传文件的路由 
-app.post('/upload/*', upload.single('file'), (req, res) => {
-  const filedir = path.join(filepath,req.path.substring(8));
-  const pswd = req.body.pswd;
-  if(pswd != pswd_set){
-    res.status(400).send('Password Denied!');
-    return;
-  }
-  if (req.file) {
-    // 将文件从临时目录移动到静态文件目录
-    const source = fs.createReadStream(req.file.path);
-    const destination = fs.createWriteStream(path.join(filedir, req.file.originalname));
-    source.pipe(destination);
-    source.on('end', () => {
-      fs.unlinkSync(req.file.path); // 删除临时文件
-      res.send('File uploaded successfully');
-    });
-  } else {
-    res.status(400).send('No file uploaded');
-  }
+// // 上传文件的路由 
+// app.post('/upload/*', upload.single('file'), (req, res) => {
+//   const filedir = path.join(filepath,req.path.substring(8));
+//   const pswd = req.body.pswd;
+//   if(pswd != pswd_set){
+//     res.status(400).send('Password Denied!');
+//     return;
+//   }
+//   if (req.file) {
+//     // 将文件从临时目录移动到静态文件目录
+//     const source = fs.createReadStream(req.file.path);
+//     const destination = fs.createWriteStream(path.join(filedir, req.file.originalname));
+//     source.pipe(destination);
+//     source.on('end', () => {
+//       fs.unlinkSync(req.file.path); // 删除临时文件
+//       res.send('File uploaded successfully');
+//     });
+//   } else {
+//     res.status(400).send('No file uploaded');
+//   }
+// });
+app.get('*/uploadfile.html', (req, res) => {
+  const reqdir = req.path.substring(0,req.path.length - 16) + '/';
+  const filedir = path.join(filepath,reqdir);
+  return res.render('uploadfile',{path:reqdir});
 });
 
+app.use(uploadServer);
 // 下载文件的路由
 app.get('/download/*', (req, res) => {
   const filename = req.path.substring(9);
@@ -96,7 +102,7 @@ app.get(/^\/(?!download\/).*/, (req, res) => {
         };
       });
       // 渲染EJS模板
-      res.render('index', { files: fileList,nowpath:req.path,lastpath:path.dirname(req.path) });
+      res.render('index', { files: fileList,nowpath:req.path.substring(1),lastpath:path.dirname(req.path) });
     });
   }
 });

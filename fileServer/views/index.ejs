@@ -45,7 +45,11 @@
   <h2>Upload File</h2>
   <button onclick="showUploadIframe()" id="showButton">Upload</button>
   <div class="modal" id="modal">
-    <iframe src="<%= nowpath %>/uploadfile.html" id="uploadIframe"></iframe>
+    <% if(nowpath === '/') {%>
+      <iframe src="/uploadfile.html" id="uploadIframe"></iframe>
+    <% } else {%>
+      <iframe src="<%= nowpath %>/uploadfile.html" id="uploadIframe"></iframe>
+    <% } %>
     <button onclick="hideUploadIframe()">关闭</button>
   </div>
 

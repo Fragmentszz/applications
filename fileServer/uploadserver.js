@@ -111,18 +111,22 @@ const pipeStream = (path, writeStream) => {
       // 如果在读取过程中发生错误，拒绝 Promise
       reject(err)
     })
+    // if (fse.pathExistsSync(path)){
+    //   try{
+    //     // 在一个指定位置写入文件流
+    //     readStream.pipe(writeStream).on('finish', () => {
+          
+    //       // 写入完成后，删除原切片文件
+    //       fse.unlinkSync(path);
+    //       resolve()
+    //     })
+    //   }catch(error){
+    //     console.log(error);
+    //   }
+    // }else{
+    //   ;
+    // }
     
-    try{
-      // 在一个指定位置写入文件流
-      readStream.pipe(writeStream).on('finish', () => {
-        
-        // 写入完成后，删除原切片文件
-        fse.unlinkSync(path);
-        resolve()
-      })
-    }catch(error){
-      console.log(error);
-    }
   });
 }
 
@@ -139,7 +143,7 @@ const mergeFileChunk = async (chunkSize, fileHash, filePath) => {
     chunkPaths.sort((a, b) => a.split('-')[1] - b.split('-')[1])
 
     let promiseList = []
-    console.log(chunkPaths);
+
     for (let index = 0; index < chunkPaths.length; index++) {
       // target/chunkCache_hash值/文件切片位置
       let chunkPath = path.resolve(chunkCache, chunkPaths[index])
@@ -198,13 +202,11 @@ app.post('/merge', async (req, res) => {
     
     // 切片大小 文件名 文件hash
     const { chunkSize, fileName, fileHash, reqpath } = data;
-    console.log('merge');
-    console.log(reqpath);
+
     // 提取文件后缀名
     const ext = extractExt(fileName)
     // 整个文件路径 /target/文件hash.文件后缀
     const filePath = path.join(FILE_DIR,reqpath,`${fileName}`);
-    console.log(filePath);
     // 开始合并切片
     await mergeFileChunk(chunkSize, fileHash, filePath)
     res.send({
@@ -231,7 +233,6 @@ const createUploadedList = async (fileHash) => {
 
 // 验证是否存在已上传切片
 app.post('/verify', async (req, res) => {
-  console.log("verify");
   try {
     const data = await resolvePost(req)
     const { fileHash, fileName,wd } = data

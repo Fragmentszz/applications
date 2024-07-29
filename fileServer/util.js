@@ -39,7 +39,86 @@ function getPrelook(extension, urlpath) {
     }
 }
 
+
+
+// 如果你想要取消定时器，可以这样做：
+// clearInterval(timer);
+
+
+
+const fse = require('fs-extra');
+const moment = require('moment'); // 用于时间处理
+
+async function isDirectoryEmpty(dirPath) {
+    try {
+        // 使用fs.promises.readdir获取文件夹中的所有文件和目录的名称
+        const files = await fse.readdir(dirPath);
+        // 如果返回的数组长度为0，则文件夹为空
+        return files.length === 0;
+    } catch (err) {
+        // 如果发生错误，则文件夹不为空
+        return false;
+    }
+}
+
+function delDir(p) {
+    // 读取文件夹中所有文件及文件夹
+    var list = fs.readdirSync(p)
+    list.forEach((v, i) => {
+        // 拼接路径
+        var url = p + '/' + v
+        // 读取文件信息
+        var stats = fs.statSync(url)
+        // 判断是文件还是文件夹
+        if (stats.isFile()) {
+            // 当前为文件，则删除文件
+            fs.unlinkSync(url)
+        } else {
+            // 当前为文件夹，则递归调用自身
+            arguments.callee(url)
+        }
+    })
+    // 删除空文件夹
+    fs.rmdirSync(p)
+}
+
+
+async function deleteFilesAndFolder(uploadsDir, maxAge) {
+    try {
+        // 获取文件夹中的所有文件和目录
+        const files = await fse.readdir(uploadsDir);
+
+        // 遍历文件和目录
+        for (const file of files) {
+            const filePath = path.join(uploadsDir, file);
+            const stats = await fse.lstat(filePath);
+
+            // 如果是文件，并且其修改时间超过最大年龄
+            if (stats.isFile() && moment(stats.mtime).isBefore(moment().subtract(maxAge, 'seconds'))) {
+                // 删除文件
+                await fse.unlink(filePath);
+                console.log(`已删除旧文件: ${filePath}`);
+            }
+
+            // 如果是目录，并且其修改时间超过最大年龄
+            if (stats.isDirectory() && moment(stats.mtime).isBefore(moment().subtract(maxAge, 'seconds'))) {
+                delDir(filePath);
+            }
+        }
+    } catch (err) {
+        console.error('删除文件和文件夹时发生错误:', err);
+    }
+}
+
+function clearnUp(dictionary, maxAge, timeInterval) {
+    let ft = function () {
+        deleteFilesAndFolder(dictionary, maxAge);
+    };
+    const timer = setInterval(ft, timeInterval);
+}
+
 module.exports = {
     formatFileSize: formatFileSize,
-    getPrelook: getPrelook
+    getPrelook: getPrelook,
+    clearUploadsDirectory: clearnUp
 }

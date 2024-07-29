@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const app = express();
-const { formatFileSize,getPrelook } = require('./util')
+const { formatFileSize,getPrelook,clearUploadsDirectory } = require('./util')
 const uploadServer = require('./uploadserver.js');
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
@@ -146,4 +146,5 @@ const PORT = 6921;
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
- 
+
+clearUploadsDirectory('uploads/',24*60*60,24*60*60*1000);

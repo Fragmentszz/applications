@@ -43,6 +43,7 @@ function displayFileSize() {
 let ison = false;
 // 当用户点击上传按钮时，打开iframe
 function showUploadIframe() {
+    console.log("?");
     var iframe = document.getElementById('modal');
     iframe.style.display = 'block'; // 显示iframe
     iframe.src = '/uploadFile.html'; // 设置iframe的src属性

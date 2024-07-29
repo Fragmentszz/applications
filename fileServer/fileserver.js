@@ -14,7 +14,9 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 const pswd_set = "wxhna3590";
-// // 上传文件的路由 
+
+
+// 上传文件的路由 
 // app.post('/upload/*', upload.single('file'), (req, res) => {
 //   const filedir = path.join(filepath,req.path.substring(8));
 //   const pswd = req.body.pswd;
@@ -23,9 +25,10 @@ const pswd_set = "wxhna3590";
 //     return;
 //   }
 //   if (req.file) {
-//     // 将文件从临时目录移动到静态文件目录
+//     let originalnameBuffer = Buffer.from(req.file.originalname, 'binary');
+//     let originalname = iconv.decode(originalnameBuffer, 'utf-8');
 //     const source = fs.createReadStream(req.file.path);
-//     const destination = fs.createWriteStream(path.join(filedir, req.file.originalname));
+//     const destination = fs.createWriteStream(path.join(filedir, originalname));
 //     source.pipe(destination);
 //     source.on('end', () => {
 //       fs.unlinkSync(req.file.path); // 删除临时文件
@@ -35,6 +38,7 @@ const pswd_set = "wxhna3590";
 //     res.status(400).send('No file uploaded');
 //   }
 // });
+
 app.get('*/uploadfile.html', (req, res) => {
   const reqdir = req.path.substring(0,req.path.length - 16) + '/';
   const filedir = path.join(filepath,reqdir);
@@ -42,9 +46,12 @@ app.get('*/uploadfile.html', (req, res) => {
 });
 
 app.use(uploadServer);
+
+
 // 下载文件的路由
 app.get('/download/*', (req, res) => {
-  const filename = req.path.substring(9);
+  let filename = req.path.substring(9);
+  filename = decodeURI(filename);
   const filePath = path.join(filepath, filename);
   res.download(filePath, (err) => {
     if (err) {
@@ -55,7 +62,8 @@ app.get('/download/*', (req, res) => {
 const downDir = "http://downfile.fragments.work/";
 // 列出文件的路由
 app.get(/^\/(?!download\/).*/, (req, res) => {
-  const directoryPath = path.join(__dirname, filepath, req.path);
+  const reqpath = decodeURI(req.path);
+  const directoryPath = path.join(__dirname, filepath, reqpath);
   const extension = path.extname(directoryPath).toLowerCase();
   var stat = fs.lstatSync(directoryPath);
   if (stat.isFile()) {
@@ -63,19 +71,19 @@ app.get(/^\/(?!download\/).*/, (req, res) => {
     const stats = fs.statSync(filePath);
     const ejsfile = {
       name: path.basename(directoryPath),
-      path: req.path,
+      path: reqpath,
       time: stats.atime,
       size: formatFileSize(stats.size),
       type: path.extname(directoryPath).substring(1), // 获取文件类型
-      downurl: `/download${req.path}`,
+      downurl: `/download${reqpath}`,
       openurl: downDir + req.path,
-      prelook: getPrelook(extension,req.path),
+      prelook: getPrelook(extension,reqpath),
       extension:extension
     }
     res.render('File', ejsfile);
   }
   else {
-    fs.readdir(directoryPath, (err, files) => {
+    fs.readdir(directoryPath, {encoding:"utf-8"},(err, files) => {
       if (err) {
         res.status(500).send('Error reading directory');
         return;
@@ -85,7 +93,7 @@ app.get(/^\/(?!download\/).*/, (req, res) => {
         const filePath = path.join(directoryPath, file);
         const stats = fs.statSync(filePath);
         let t = "forder";
-        if (stat.isFile()) {
+        if (stats.isFile()) {
           t = path.extname(file).substring(1); // 获取文件类型
         }
         // 获取文件的最后修改时间（毫秒数）
@@ -101,8 +109,20 @@ app.get(/^\/(?!download\/).*/, (req, res) => {
           isFile: stats.isFile()
         };
       });
+      fileList.sort(
+        (x,y) =>{
+          if(x.isFile < y.isFile){
+            return -1;
+          }
+          else if(x.isFile > y.isFile){
+            return 1;
+          } else if(x.name > y.name){
+            return 1;
+          }else return -1;
+        }
+      );
       // 渲染EJS模板
-      res.render('index', { files: fileList,nowpath:req.path.substring(1),lastpath:path.dirname(req.path) });
+      res.render('index', { files: fileList,nowpath:reqpath,lastpath:path.dirname(reqpath) });
     });
   }
 });
@@ -126,3 +146,4 @@ const PORT = 6921;
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
+ 

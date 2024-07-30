@@ -3,7 +3,7 @@ const app = express()
 const path = require('path')
 const fse = require('fs-extra')
 const multiparty = require('multiparty')
-
+const {delDir} = require('./util.js');
 app.use((req, res, next) => {
   // 请求头允许跨域
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -109,23 +109,20 @@ const pipeStream = (path, writeStream) => {
     // 创建可读流
     const readStream = fse.createReadStream(path).on('error', (err) => {
       // 如果在读取过程中发生错误，拒绝 Promise
-      reject(err)
+      reject(err);
     })
-    // if (fse.pathExistsSync(path)){
-    //   try{
-    //     // 在一个指定位置写入文件流
-    //     readStream.pipe(writeStream).on('finish', () => {
-          
-    //       // 写入完成后，删除原切片文件
-    //       fse.unlinkSync(path);
-    //       resolve()
-    //     })
-    //   }catch(error){
-    //     console.log(error);
-    //   }
-    // }else{
-    //   ;
-    // }
+    if (fse.pathExistsSync(path)){
+      try{
+        // 在一个指定位置写入文件流
+        readStream.pipe(writeStream).on('finish', () => {
+          ;
+        })
+      }catch(error){
+        console.log(error);
+      }
+    }else{
+      ;
+    }
     
   });
 }
@@ -137,11 +134,9 @@ const mergeFileChunk = async (chunkSize, fileHash, filePath) => {
     const chunkCache = getChunkDir(fileHash)
     // 读取 临时所有切片目录 chunkCache 下的所有文件和子目录，并返回这些文件和子目录的名称。
     const chunkPaths = await fse.readdir(chunkCache)
-
     // 根据切片下标进行排序
     // 否则直接读取目录的获得的顺序会错乱
     chunkPaths.sort((a, b) => a.split('-')[1] - b.split('-')[1])
-
     let promiseList = []
 
     for (let index = 0; index < chunkPaths.length; index++) {
@@ -153,24 +148,25 @@ const mergeFileChunk = async (chunkSize, fileHash, filePath) => {
       })
       promiseList.push(pipeStream(chunkPath, writeStream))
     }
-
+    
     // 使用 Promise.all 等待所有 Promise 完成
     // (相当于等待所有的切片已写入完成且删除了所有的切片文件)
     Promise.all(promiseList)
       .then(() => {
-        // console.log('所有文件切片已成功处理并删除')
-        // 在这里执行所有切片处理完成后的操作
-        // 递归删除缓存切片目录及其内容 (注意，如果删除不存在的内容会报错)
-        if (fse.pathExistsSync(chunkCache)) {
-          fse.remove(chunkCache)
-          // console.log(`chunkCache缓存目录删除成功`)
-          // 合并成功，返回 Promise.resolve
-          return Promise.resolve()
-        } else {
-          console.log(`${chunkCache} 不存在，不能删除`)
+        delDir(chunkCache);
+        // // console.log('所有文件切片已成功处理并删除')
+        // // 在这里执行所有切片处理完成后的操作
+        // // 递归删除缓存切片目录及其内容 (注意，如果删除不存在的内容会报错)
+        // if (fse.pathExistsSync(chunkCache)) {
+        //   fse.remove(chunkCache)
+        //   // console.log(`chunkCache缓存目录删除成功`)
+        //   // 合并成功，返回 Promise.resolve
+        //   return Promise.resolve()
+        // } else {
+        //   console.log(`${chunkCache} 不存在，不能删除`)
 
-          return Promise.reject(`${chunkCache} 不存在，不能删除`)
-        }
+        //   return Promise.reject(`${chunkCache} 不存在，不能删除`)
+        // }
       })
       .catch((err) => {
         console.error('文件处理过程中发生错误：', err)

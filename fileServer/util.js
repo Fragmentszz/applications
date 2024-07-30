@@ -120,5 +120,6 @@ function clearnUp(dictionary, maxAge, timeInterval) {
 module.exports = {
     formatFileSize: formatFileSize,
     getPrelook: getPrelook,
-    clearUploadsDirectory: clearnUp
+    clearUploadsDirectory: clearnUp,
+    delDir:delDir
 }

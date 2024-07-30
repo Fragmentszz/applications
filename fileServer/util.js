@@ -61,25 +61,26 @@ async function isDirectoryEmpty(dirPath) {
     }
 }
 
-function delDir(p) {
+async function delDir(p) {
     // 读取文件夹中所有文件及文件夹
-    var list = fs.readdirSync(p)
-    list.forEach((v, i) => {
-        // 拼接路径
-        var url = p + '/' + v
-        // 读取文件信息
-        var stats = fs.statSync(url)
+    const list = await fse.readdir(p);
+
+    for (const v of list) {
+        const url = p + '/' + v;
+        const stats = await fse.stat(url);
+
         // 判断是文件还是文件夹
         if (stats.isFile()) {
             // 当前为文件，则删除文件
-            fs.unlinkSync(url)
+            await fs.unlink(url);
         } else {
             // 当前为文件夹，则递归调用自身
-            arguments.callee(url)
+            await delDir(url);
         }
-    })
+    }
+
     // 删除空文件夹
-    fs.rmdirSync(p)
+    await fse.rmdir(p);
 }
 
 

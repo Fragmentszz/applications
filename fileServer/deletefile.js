@@ -4,6 +4,7 @@ const path = require('path')
 const fse = require('fs-extra')
 const multiparty = require('multiparty')
 const {delDir,modetoBin, movetoBin} = require('./util.js');
+const {Password} = require('./config.json');
 app.use(express.json());
 app.use((req, res, next) => {
   // 请求头允许跨域
@@ -21,7 +22,6 @@ app.options('*', (req, res) => {
 // 大文件存储目录
 const BIN_DIR = path.resolve(__dirname, 'rubbishbin');
 const FILE_DIR = path.resolve(__dirname, 'files')
-const Password = "wxhna3590";
 
 
 app.post('/delete', async (req,res) => {

@@ -20,7 +20,7 @@ app.options('*', (req, res) => {
 // 大文件存储目录
 const UPLOAD_DIR = path.resolve(__dirname, 'uploads');
 const FILE_DIR = path.resolve(__dirname, 'files')
-const Password = "wxhna3590";
+const {Password} = require('./config.json');
 // 创建临时文件夹用于临时存储 所有的文件切片
 const getChunkDir = (fileHash) => {
   // 添加 chunkCache 前缀与文件名做区分

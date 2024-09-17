@@ -4,6 +4,8 @@ const fs = require('fs');
 const app = express();
 const { formatFileSize,getPrelook,clearUploadsDirectory } = require('./util')
 const uploadServer = require('./uploadserver.js');
+const deletefile = require('./deletefile.js');
+
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 const filepath = "files"
@@ -46,7 +48,7 @@ app.get('*/uploadfile.html', (req, res) => {
 });
 
 app.use(uploadServer);
-
+app.use(deletefile);
 
 // 下载文件的路由
 app.get('/download/*', (req, res) => {
@@ -55,6 +57,7 @@ app.get('/download/*', (req, res) => {
   const filePath = path.join(filepath, filename);
   res.download(filePath, (err) => {
     if (err) {
+      console.log(err);
       res.status(404).send('File not found');
     }
   });
@@ -148,3 +151,4 @@ app.listen(PORT, () => {
 });
 
 clearUploadsDirectory('uploads/',24*60*60,24*60*60*1000);
+clearUploadsDirectory('rubbishbin/',7*24*60*60,24*60*60*1000);

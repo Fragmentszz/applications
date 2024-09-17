@@ -1,0 +1,133 @@
+ /* 简单的CSS样式用于美化导航栏 */
+ body,
+ html {
+     height: 100%;
+     margin: 0;
+     font-family: Arial, sans-serif;
+ }
+
+ nav {
+     display: flex;
+     flex-direction: column;
+ }
+
+ nav a {
+     padding: 20px;
+     font-size: 24px;
+     text-decoration: none;
+     color: #333;
+     transition: color 0.3s;
+ }
+
+ nav a:hover {
+     color: #007BFF;
+ }
+
+ .backdiv {
+     width: 100%;
+     /* 设置div的宽度 */
+     height: 100%;
+     /* 设置div的高度 */
+     background-image: linear-gradient(rgba(201, 181, 181, 0.2), rgba(255, 255, 255, 0.2)), url('/img/star.jpg');
+     /* 替换为您的图片路径 */
+     background-size: cover;
+     /* 使背景图覆盖整个容器 */
+     background-position: center;
+     /* 使背景图在容器中居中 */
+     background-repeat: no-repeat;
+     /* 防止背景图重复 */
+     background-color: rgba(255, 255, 255, 0.2);
+
+ }
+
+ .introduce {
+     padding: 20px;
+     color: #fff;
+     /* 使用Flexbox布局使navdiv居中 */
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     /* 水平居中 */
+     align-items: center;
+     /* 垂直居中 */
+ }
+
+ .navdiv {
+     /* 使用Flexbox布局使navdiv居中 */
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     /* 水平居中 */
+     align-items: center;
+     /* 垂直居中 */
+ }
+
+
+ /* 增加边框和圆角 */
+ nav a {
+     padding: 20px;
+     font-size: 24px;
+     text-decoration: none;
+     color: #fff;
+     transition: color 0.3s;
+     border: 1px solid #ddd;
+     /* 添加边框 */
+     border-radius: 5px;
+     /* 添加圆角 */
+ }
+
+ /* 鼠标悬停时改变边框颜色 */
+ nav a:hover {
+     color: #007BFF;
+     border-color: #007BFF;
+     /* 改变边框颜色 */
+ }
+
+ /* 设置导航的背景颜色和字体颜色 */
+ .introduce {
+     background-color: rgba(242,242,242,0.75);
+     /* 设置导航的背景颜色 */
+     color: #333;
+     /* 设置导航的文字颜色 */
+
+ }
+ .navdiv {
+     background-color: rgba(57, 53, 58, 0.5);
+     /* 设置导航的背景颜色 */
+     color: #e6e1e1;
+     /* 设置导航的文字颜色 */
+ }
+
+ /* 设置导航栏的边框和内边距 */
+ .navdiv nav {
+     padding: 10px;
+     /* 添加内边距 */
+     border-bottom: 1px solid #ddd;
+     /* 添加底部边框 */
+ }
+
+ /* 设置导航栏的字体和间距 */
+ .navdiv nav a {
+     margin-bottom: 10px;
+     /* 添加下边距 */
+ }
+
+ #container{
+    position: relative; /* 或者是 relative, fixed, sticky */
+    top:30%;
+    width: 100%;
+ }
+#beian {
+            display: block;
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            text-decoration: none;
+            margin-top: 20px;
+}
+#beian:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+

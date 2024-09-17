@@ -6,3 +6,9 @@ nodejs/
 **/node_modules/
 **/build/*
 /v2v3-large-file-upload/
+cs-baoyan-ddl/
+fileServer/rubbishbin/*
+frp/
+hexo/
+nginx/
+cs-baoyan-ddl/

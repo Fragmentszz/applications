@@ -69,73 +69,59 @@ document.addEventListener('click', function (event) {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    // 删除按钮点击事件
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const filePath = this.getAttribute('data-file-path'); // 假设按钮有一个data-file-path属性
+            const p = document.getElementById('ensure-text');
+            p.innerText = "注意！您将会删除" + filePath + "";
+            const dialog = document.getElementById('confirm-delete');
+            dialog.returnValue = filePath; // 设置返回值
+            dialog.showModal();
+        });
+    });
 
-// const form = document.getElementById('uploadForm');
-// const progressBar = document.getElementById('progressBar');
-// const ahas = document.getElementById('hasUpload');
-// const atot = document.getElementById('totalSize');
+    // 确认删除按钮点击事件
+    document.getElementById('confirm-btn').addEventListener('click', function () {
+        const filePath = document.getElementById('confirm-delete').returnValue;
+        console.log(filePath);
+        deleteFile(filePath); // 调用删除文件的函数
+        document.getElementById('confirm-delete').close();
+    });
 
+    // 取消按钮点击事件
+    document.getElementById('cancel-btn').addEventListener('click', function () {
+        document.getElementById('confirm-delete').close();
+    });
+});
 
-// let xhr = null;
-// let isPaused = false;
-// let isCancelled = false;
-// let path = 'asdlfal'
-// let formData = null;
-// form.addEventListener('submit', function (event) {
-//     event.preventDefault();
-//     formData = new FormData(form);
-//     xhr = new XMLHttpRequest();
-//     xhr.open('POST', path, true);
-//     // 上传进度事件
-//     xhr.upload.onprogress = function (e) {
-//         if (e.lengthComputable) {
-//             atot.innerHTML = getFileSize(e.total);
-//             ahas.innerHTML = getFileSize(e.loaded);
-//             progressBar.value = (e.loaded / e.total) * 100;
-//         }
-//     };
+function deleteFile(filePath){
+    const password = document.getElementById('delete-pswd').value;
 
-//     // 请求完成
-//     xhr.onload = function () {
-//         if (xhr.status === 200) {
-//             alert('File uploaded successfully');
-//             location.reload(true); // 传入true作为参数，将强制从服务器加载页面
-//         } else {
-//             alert('An error occurred!');
-//         }
-//     };
+    // 创建要发送的数据对象
+    const data = {
+      password: password,
+      filepath: filePath
+    };
 
-//     // 发送请求
-//     xhr.send(formData);
+    // 发送POST请求到'/delete'
+    axios.post('/delete', data)
+      .then(function (response) {
+        const res = response.data;
+        desciption = res['describe'];
+        if(res.status === '0'){
+            alert('已移入回收站~最多存放7天！');
+        }else{
+            alert(desciption);
+        }
 
-// });
+        location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert("发生了通信故障=.=");
 
-
-
-// document.getElementById('pauseBtn').addEventListener('click', pauseUpload);
-// document.getElementById('cancelBtn').addEventListener('click', cancelUpload);
-
-// function pauseUpload() {
-//     if (xhr) {
-//         if (xhr.readyState !== XMLHttpRequest.DONE) {
-//             if (!isPaused) {
-//                 xhr.abort(); // 取消当前请求
-//                 isPaused = true;
-//             } else {
-//                 xhr.open('POST', path, true);
-//                 xhr.send(formData);
-//                 isPaused = false;
-//             }
-//         }
-//     }
-// }
-
-// function cancelUpload() {
-//     if (xhr) {
-//         xhr.abort(); // 取消当前请求
-//         isCancelled = true;
-//         document.getElementById('progressBar').value = 0;
-//         atot.innerHTML = '--';
-//         ahas.innerHTML = '--';
-//     }
-// }
+        location.reload();
+      });
+}

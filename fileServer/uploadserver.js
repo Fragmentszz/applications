@@ -15,7 +15,7 @@ app.options('*', (req, res) => {
   res.sendStatus(200)
 })
 
-// app.listen(port, () => console.log('vue3完整版大文件上传：监听3030端口'))
+
 
 // 大文件存储目录
 const UPLOAD_DIR = path.resolve(__dirname, 'uploads');

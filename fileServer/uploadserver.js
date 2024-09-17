@@ -3,7 +3,7 @@ const app = express()
 const path = require('path')
 const fse = require('fs-extra')
 const multiparty = require('multiparty')
-const {delDir} = require('./util.js');
+const { delDir } = require('./util.js');
 app.use((req, res, next) => {
   // 请求头允许跨域
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -20,7 +20,13 @@ app.options('*', (req, res) => {
 // 大文件存储目录
 const UPLOAD_DIR = path.resolve(__dirname, 'uploads');
 const FILE_DIR = path.resolve(__dirname, 'files')
-const {Password} = require('./config.json');
+const { Password } = require('./config.json');
+
+// 确保目标目录存在，如果不存在则创建它
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
+
 // 创建临时文件夹用于临时存储 所有的文件切片
 const getChunkDir = (fileHash) => {
   // 添加 chunkCache 前缀与文件名做区分
@@ -111,19 +117,19 @@ const pipeStream = (path, writeStream) => {
       // 如果在读取过程中发生错误，拒绝 Promise
       reject(err);
     })
-    if (fse.pathExistsSync(path)){
-      try{
+    if (fse.pathExistsSync(path)) {
+      try {
         // 在一个指定位置写入文件流
         readStream.pipe(writeStream).on('finish', () => {
           ;
         })
-      }catch(error){
+      } catch (error) {
         console.log(error);
       }
-    }else{
+    } else {
       ;
     }
-    
+
   });
 }
 
@@ -148,7 +154,7 @@ const mergeFileChunk = async (chunkSize, fileHash, filePath) => {
       })
       promiseList.push(pipeStream(chunkPath, writeStream))
     }
-    
+
     // 使用 Promise.all 等待所有 Promise 完成
     // (相当于等待所有的切片已写入完成且删除了所有的切片文件)
     Promise.all(promiseList)
@@ -195,14 +201,14 @@ app.post('/merge', async (req, res) => {
   try {
     // 在上传完所有切片后就要调合并切片
     const data = await resolvePost(req);
-    
+
     // 切片大小 文件名 文件hash
     const { chunkSize, fileName, fileHash, reqpath } = data;
 
     // 提取文件后缀名
     const ext = extractExt(fileName)
     // 整个文件路径 /target/文件hash.文件后缀
-    const filePath = path.join(FILE_DIR,reqpath,`${fileName}`);
+    const filePath = path.join(FILE_DIR, reqpath, `${fileName}`);
     // 开始合并切片
     await mergeFileChunk(chunkSize, fileHash, filePath)
     res.send({
@@ -231,16 +237,18 @@ const createUploadedList = async (fileHash) => {
 app.post('/verify', async (req, res) => {
   try {
     const data = await resolvePost(req)
-    const { fileHash, fileName,wd } = data
+    const { fileHash, fileName, wd } = data
     // 文件名后缀
     const ext = extractExt(fileName)
     // 最终文件路径
     const filePath = path.resolve(UPLOAD_DIR, `${fileHash}${ext}`);
-    if(wd !== Password){
-      res.send({ code: -2, msg: '密码错误！', data: {
-        shouldUpload: false
-      } });
-    }else{
+    if (wd !== Password) {
+      res.send({
+        code: -2, msg: '密码错误！', data: {
+          shouldUpload: false
+        }
+      });
+    } else {
       // 如果已经存在文件则标识文件已存在，不需要再上传
       if (fse.existsSync(filePath)) {
         res.send({
@@ -264,7 +272,7 @@ app.post('/verify', async (req, res) => {
         })
       }
     }
-    
+
   } catch (err) {
     res.send({ code: -1, msg: '上传失败', data: err })
   }

@@ -15,8 +15,6 @@ const upload = multer({ dest: 'uploads/' });
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-const pswd_set = "wxhna3590";
-
 
 // 上传文件的路由 
 // app.post('/upload/*', upload.single('file'), (req, res) => {
